@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>海滨民宿</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+			list-style: none;
+		}
+		#box1{
+			width: 1200px;
+			height: 390px;
+			border: 1px solid red;
+			position: relative;
+			overflow: hidden;
+			margin: auto;
+		}
+		.box3{
+			width: 8400px;
+			position: absolute;
+			left: -1200px;
+			margin: auto;
+		}
+		.box3 img{
+			height: 390px;
+			width: 1200px;
+		}
+		.slide{
+			width: 1200px;
+			float: left;
+			overflow: hidden;
+		}
+		#box1>span{
+			display: block;
+			width: 30px;
+			height: 50px;
+			text-align: center;
+			cursor: pointer;
+			top: 175px;
+			line-height: 50px;
+			background: rgb(255,0,0);
+			font-size: 30px;
+			position: absolute;
+			opacity: 0;
+		}
+		#leftButton{
+			left: 30px;
+		}
+		#rightButton{
+			right: 30px;
+		}
+		.nav{
+			position: absolute;
+			left: 500px;
+			bottom: 20px;
+		}
+		.nav>li{
+			float: left;
+			width: 20px;
+			height: 20px;
+			background: lightgray;
+			cursor: pointer;
+			margin: 0 10px;
+			border-radius: 50%;
+		}
+		.nav .active{
+			background: red;
+			color: white;
+		}
+	</style>
+	<script src="animate.js"></script>
+</head>
+<body>
+	<!-- <div class="bigBox"> -->
+		<div id="box1">
+			<div class="box3">
+				<div class="slide"><img src="imga04.jpg"></div>
+				<div class="slide"><img src="imga00.jpg" title="1"></div>
+				<div class="slide"><img src="imga01.jpg" title="2"></div>
+				<div class="slide"><img src="imga02.jpg" title="3"></div>
+				<div class="slide"><img src="imga03.jpg" title="4"></div>
+				<div class="slide"><img src="imga04.jpg" title="5"></div>
+				<div class="slide"><img src="imga00.jpg"></div>
+			</div>
+			<span id="leftButton"> < </span>
+			<span id="rightButton"> > </span>
+			<ul class="nav" id="nav">
+				<li class="active" align="center">1</li>
+				<li align="center">2</li>
+				<li align="center">3</li>
+				<li align="center">4</li>
+				<li align="center">5</li>
+			</ul>
+		</div>
+	<!-- </div> -->
+</body>
+<script>
+	var box1=document.getElementById("box1");
+	var box3=document.getElementsByClassName("box3");
+	var slide=document.getElementsByClassName("slide");
+	var leftButton=document.getElementById("leftButton");
+	var rightButton=document.getElementById("rightButton");
+	var navList=document.getElementById("nav").children;
+	var index=1;
+	var flag=false;
+	function start(){
+		if(!flag){
+			flag=true;
+			index++;
+			change();
+			animate(box3[0],{left:-1200*index},function(){
+				if(index===6){
+					box3[0].style.left="-1200px";
+					index=1;
+				}
+				flag=false;
+			});
+		}
+	}
+	function prevous(){
+		if(!flag){
+			flag=true;
+			index--;
+			change();
+			animate(box3[0],{left:-1200*index},function(){
+				if(index===0){
+					box3[0].style.left="-6000px";
+					index=5;
+				}
+				flag=false;
+			});
+		}
+	}
+	var timer=setInterval(start,2000);
+	box1.onmouseover=function(){
+		animate(leftButton,{opacity:50});
+		animate(rightButton,{opacity:50});
+		clearInterval(timer);
+	}
+	box1.onmouseout=function(){
+		animate(leftButton,{opacity:0});
+		animate(rightButton,{opacity:0});
+		timer=setInterval(start,3000)
+	}
+	rightButton.onclick=start;
+	leftButton.onclick=prevous;
+			
+	for(var j=0;j<navList.length;j++){
+		navList[j].btn=j;
+		navList[j].onclick=function(){
+			// console.log(this.btn);
+			index=this.btn+1;
+			change();
+			// console.log(index);
+			animate(box3[0],{left:-1200*index});
+		}
+	}
+	function change(){
+		for(var j=0;j<navList.length;++j){
+			navList[j].className="";
+		}
+		if(index===6){
+			navList[0].className="active";
+		}
+		else if(index===0){
+			navList[4].className="active";
+		}
+		else{
+			navList[index-1].className="active";
+		}
+	}
+</script>
+</html>
